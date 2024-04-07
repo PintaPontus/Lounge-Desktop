@@ -1,0 +1,36 @@
+:host {
+  background-color: #2B2D30FF;
+  border-radius: 10px;
+  padding: 5px;
+  text-align: center;
+  height: 6rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 20px;
+  color: slategrey;
+}
+
+.chat-pic{
+  margin-left: 5px;
+  height: 90%;
+  border-radius: 50%;
+  border: 1px solid slategrey;
+}
+
+.chat-info{
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 5px;
+  text-align: start;
+}
+
+.chat-name {
+  margin: 0;
+}
+
+.last-message{
+  margin: 0;
+}

@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  background-color: #1E1F22FF;
+}
+
+.side-panel{
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  background-color: #1E1F22FF;
+  height: 100%;
+  width: 20%;
+}
+
+.main-panel{
+  background-color: #1E1F22FF;
+  width: 100%;
+  height: 100%;
+}
