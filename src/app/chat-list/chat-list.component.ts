@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ChatItemComponent} from "../chat-item/chat-item.component";
 
 @Component({
-    selector: 'app-chat-list',
+    selector: 'chat-list',
     standalone: true,
     imports: [
         ChatItemComponent

@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
     background-color: #1E1F22FF;
+    color: white;
 }
 
 .side-panel {
@@ -12,12 +13,12 @@
     flex-direction: column;
     justify-content: end;
     background-color: #1E1F22FF;
+    flex: 2;
     height: 100%;
-    width: 20%;
 }
 
 .main-panel {
     background-color: #1E1F22FF;
-    width: 100%;
+    flex: 8;
     height: 100%;
 }

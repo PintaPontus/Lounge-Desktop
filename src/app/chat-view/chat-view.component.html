@@ -1,0 +1,4 @@
+@for (msg of messages; track $index){
+    <chat-message [text]="msg" [class]="'self'"></chat-message>
+    <chat-message [text]="msg" [class]="'other'"></chat-message>
+}

@@ -7,6 +7,5 @@ pub fn log_application(msg: String){
 }
 
 pub async fn add_message(payload: String, app_handle: Arc<AppHandle>) {
-    app_handle.emit_all("lounge://add-message", &payload).unwrap();
-    println!("Payload {}", payload);
+    app_handle.emit_all("lounge://add-message", payload).unwrap();
 }

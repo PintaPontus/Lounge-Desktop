@@ -1,7 +1,5 @@
 <div class="side-panel">
-    <app-chat-list></app-chat-list>
-    <app-chat-menu></app-chat-menu>
+    <chat-list></chat-list>
+    <chat-menu></chat-menu>
 </div>
-<div class="main-panel">
-    {{ messages }}
-</div>
+<chat-view class="main-panel" [messages]="messages()"></chat-view>

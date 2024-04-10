@@ -4,9 +4,9 @@
 use std::sync::Arc;
 use std::thread;
 
-use crate::controller::hello_world;
+use crate::controller::{hello_world, post_message, test_message};
 use crate::tauri_layer::log_application;
-use axum::routing::get;
+use axum::routing::{get, post};
 use axum::Router;
 use tauri::App;
 use tokio::net::TcpListener;
@@ -24,7 +24,8 @@ async fn main() {
 
     let axum_app = Router::new()
         .route("/", get(hello_world))
-        // .route("/message", post(post_message))
+        .route("/message", get(test_message))
+        .route("/message", post(post_message))
         .with_state(Arc::new(tauri_app.handle()));
 
     // Spawn one separate threads for axum server

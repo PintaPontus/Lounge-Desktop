@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 
 @Component({
-    selector: 'app-chat-item',
+    selector: 'chat-item',
     standalone: true,
     imports: [
         NgOptimizedImage
