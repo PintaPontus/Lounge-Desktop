@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {invoke} from '@tauri-apps/api/tauri';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class LogService {
 
-  constructor() { }
+    constructor() {
+    }
 
     public log_application(msg: string) {
         invoke('log_application', {msg: String(msg)})

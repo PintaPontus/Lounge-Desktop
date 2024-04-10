@@ -3,10 +3,9 @@ import {RouterOutlet} from '@angular/router';
 import {ChatListComponent} from "./chat-list/chat-list.component";
 import {ChatMenuComponent} from "./chat-menu/chat-menu.component";
 
-import {appWindow, LogicalSize} from "@tauri-apps/api/window";
+import {appWindow} from "@tauri-apps/api/window";
 import {Event} from "@tauri-apps/api/event";
 import {LogService} from "./log.service";
-import {invoke} from "@tauri-apps/api/tauri";
 
 @Component({
     selector: 'app-root',
@@ -28,10 +27,9 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         Promise.allSettled([
-            appWindow.listen<string>("lounge://add-message", (event: Event<string>) => this.messages+=event.payload),
-            invoke('start_axum')
+            appWindow.listen<string>("lounge://add-message", (event: Event<string>) => this.messages += event.payload)
         ]).then(r => {
-            this.logService.log_application(`Startup done!`);
+            this.logService.log_application(`Init Window Done: ${JSON.stringify(r)}`);
         });
     }
 

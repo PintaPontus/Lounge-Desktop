@@ -3,7 +3,7 @@ use tauri::{AppHandle, command, Manager};
 
 #[command]
 pub fn log_application(msg: String){
-    println!("Application log: {}", msg);
+    println!("[Lounge Application]: {}", msg);
 }
 
 pub async fn add_message(payload: String, app_handle: Arc<AppHandle>) {
