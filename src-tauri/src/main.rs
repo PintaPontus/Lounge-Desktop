@@ -1,24 +1,32 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::sync::Arc;
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 use std::thread;
 
 use crate::controller::{hello_world, post_message, test_message};
-use crate::tauri_layer::log_application;
+use crate::tauri_layer::{log_application, dev_tools, new_chat};
 use axum::routing::{get, post};
 use axum::Router;
 use tauri::App;
 use tokio::net::TcpListener;
 use tokio::runtime::Runtime;
+use crate::chat::ChatInterface;
 
 mod controller;
 mod tauri_layer;
+mod chat;
 
 #[tokio::main]
 async fn main() {
     let tauri_app = tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![log_application])
+        .manage(Arc::new(Mutex::new(HashMap::<u64, ChatInterface>::new())))
+        .invoke_handler(tauri::generate_handler![
+            log_application,
+            dev_tools,
+            new_chat
+        ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application");
 
@@ -32,20 +40,21 @@ async fn main() {
     let axum_handle = thread::spawn(|| {
         Runtime::new().unwrap().block_on(start_axum(axum_app));
     });
+
     start_tauri(tauri_app).await;
 
     axum_handle.join().unwrap();
 }
 
 async fn start_tauri(tauri_app: App) {
-    println!("Starting Tauri");
+    println!("Starting Tauri side");
     tauri_app.run(|_app_handle, event| match event {
         _ => {}
     });
 }
 
 async fn start_axum(axum_app: Router) {
-    println!("Starting Axum");
+    println!("Starting Axum side");
     // run our app with hyper, listening globally on port 8000
     let listener = TcpListener::bind("0.0.0.0:8000").await.unwrap();
     axum::serve(listener, axum_app).await.unwrap();

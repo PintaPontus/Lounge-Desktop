@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
             })
         ]).then(r => {
             this.logService.log_application(`Init Window Done: ${JSON.stringify(r)}`);
+            this.logService.dev_tools();
         });
         this.logService.log_application(`Window Render Done`);
     }
