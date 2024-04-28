@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, command, Manager, State};
-use crate::chat::{register_chat, ChatInterface};
+use crate::chat::{register_chat, ChatInterface, ChatMessage};
 
 #[command]
 pub fn log_application(msg: String){
@@ -23,10 +23,13 @@ pub fn dev_tools(app_handle: AppHandle) -> bool{
 }
 
 #[command]
-pub async fn new_chat(app_handle: AppHandle, register: State<'_, Arc<Mutex<HashMap<u64, ChatInterface>>>>) -> Result<u16, ()> {
-    Ok(register_chat(app_handle, register).await)
+pub fn open_chat(app_handle: AppHandle, register: State<'_, Arc<Mutex<HashMap<u64, ChatInterface>>>>) -> u64 {
+    // TODO: use real address
+    let id = register_chat(String::from("127.0.0.1:8080"), register);
+    app_handle.emit_all("lounge://new-chat", id).unwrap();
+    return id;
 }
 
-pub async fn add_message(app_handle: Arc<AppHandle>, payload: String) {
+pub fn add_message(app_handle: Arc<AppHandle>, payload: ChatMessage) {
     app_handle.emit_all("lounge://add-message", payload).unwrap();
 }

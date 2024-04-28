@@ -5,14 +5,14 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-use crate::controller::{hello_world, post_message, test_message};
-use crate::tauri_layer::{log_application, dev_tools, new_chat};
-use axum::routing::{get, post};
 use axum::Router;
 use tauri::App;
 use tokio::net::TcpListener;
 use tokio::runtime::Runtime;
+
 use crate::chat::ChatInterface;
+use crate::controller::get_router;
+use crate::tauri_layer::{dev_tools, log_application, open_chat};
 
 mod controller;
 mod tauri_layer;
@@ -25,15 +25,12 @@ async fn main() {
         .invoke_handler(tauri::generate_handler![
             log_application,
             dev_tools,
-            new_chat
+            open_chat
         ])
         .build(tauri::generate_context!())
-        .expect("error while building tauri application");
+        .expect("Error while building Tauri Application");
 
-    let axum_app = Router::new()
-        .route("/", get(hello_world))
-        .route("/message", get(test_message))
-        .route("/message", post(post_message))
+    let axum_app = get_router()
         .with_state(Arc::new(tauri_app.handle()));
 
     // Spawn one separate threads for axum server
@@ -47,14 +44,14 @@ async fn main() {
 }
 
 async fn start_tauri(tauri_app: App) {
-    println!("Starting Tauri side");
+    // println!("Starting Tauri side");
     tauri_app.run(|_app_handle, event| match event {
         _ => {}
     });
 }
 
 async fn start_axum(axum_app: Router) {
-    println!("Starting Axum side");
+    // println!("Starting Axum side");
     // run our app with hyper, listening globally on port 8000
     let listener = TcpListener::bind("0.0.0.0:8000").await.unwrap();
     axum::serve(listener, axum_app).await.unwrap();
