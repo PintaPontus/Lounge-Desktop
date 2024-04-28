@@ -9,17 +9,9 @@ pub fn log_application(msg: String){
 }
 
 #[command]
-pub fn dev_tools(app_handle: AppHandle) -> bool{
+pub fn dev_tools(app_handle: AppHandle) {
     let window = app_handle.get_window("main").unwrap();
-    let opened = window.is_devtools_open();
-    if opened {
-        println!("Closing dev tools");
-        window.close_devtools();
-    } else {
-        println!("Opening dev tools");
-        window.open_devtools();
-    }
-    return !opened;
+    window.open_devtools();
 }
 
 #[command]

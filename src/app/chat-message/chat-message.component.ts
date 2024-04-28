@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {ChatMessage} from "../../interfaces/chat-message";
 
 @Component({
   selector: 'chat-message',
@@ -8,7 +9,6 @@ import {Component, Input} from '@angular/core';
   styleUrl: './chat-message.component.scss'
 })
 export class ChatMessageComponent {
-    @Input() text!: string;
-    date: Date = new Date();
+    @Input() msg!: ChatMessage;
     protected readonly String = String;
 }

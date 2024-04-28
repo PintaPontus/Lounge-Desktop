@@ -3,7 +3,7 @@
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use std::thread;
+use std::{env, thread};
 
 use axum::Router;
 use tauri::App;
@@ -52,7 +52,7 @@ async fn start_tauri(tauri_app: App) {
 
 async fn start_axum(axum_app: Router) {
     // println!("Starting Axum side");
-    // run our app with hyper, listening globally on port 8000
-    let listener = TcpListener::bind("0.0.0.0:8000").await.unwrap();
+    let port = env::var("LISTENING_PORT").unwrap_or(String::from("8000"));
+    let listener = TcpListener::bind(format!("0.0.0.0:{}", port)).await.unwrap();
     axum::serve(listener, axum_app).await.unwrap();
 }

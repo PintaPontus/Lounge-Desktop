@@ -17,7 +17,7 @@ pub struct ChatInterface {
 #[derive(Clone)]
 pub struct ChatMessage {
     pub sender: u64,
-    pub msg: String,
+    pub content: String,
     pub date: DateTime<Utc>
 }
 
@@ -35,7 +35,7 @@ impl ChatMessage{
     pub fn new(message: MessagePayload) -> Self {
         Self{
             sender: message.sender,
-            msg: message.msg,
+            content: message.content,
             date: Utc::now()
         }
     }
@@ -45,7 +45,7 @@ impl serde::ser::Serialize for ChatMessage {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
         let mut state = serializer.serialize_struct("ChatMessage", 3)?;
         state.serialize_field("sender", &self.sender)?;
-        state.serialize_field("msg", &self.msg)?;
+        state.serialize_field("content", &self.content)?;
         state.serialize_field("date", &self.date)?;
         state.end()
     }

@@ -17,7 +17,7 @@ export class LogService {
 
     public dev_tools() {
         invoke<boolean>('dev_tools')
-            .then(opened => console.log(`WebApp log: dev_tools new ${opened ? 'opened' : 'closed'}`))
-            .catch(e => console.error(`Unable to toggle dev_tools: ${e}`));
+            .then(_ => console.log(`WebApp log: dev_tools now opened`))
+            .catch(e => console.error(`Unable to use dev_tools: ${e}`));
     }
 }

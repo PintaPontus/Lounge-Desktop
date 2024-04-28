@@ -1,7 +1,11 @@
-<button (click)="open()">CLICK</button>
-{{port}}
-CIAONE A TUTTI
-@for (msg of messages; track $index){
-    <chat-message [text]="msg" [class]="'self'"></chat-message>
-    <chat-message [text]="msg" [class]="'other'"></chat-message>
-}
+<!--<button (click)="open()">CLICK</button>-->
+<!--{{port}}-->
+<!--CIAONE A TUTTI-->
+<messages-view
+    class="message-list"
+    [ngClass]="{'lazy': messages().length > 12}"
+    [messages]="messages()"
+    [bottomScroll]="bottomScroll.asObservable()"
+    (scroll)="onScroll()"
+></messages-view>
+<chat-prompt></chat-prompt>

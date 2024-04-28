@@ -11,34 +11,23 @@ use crate::tauri_layer;
 
 pub fn get_router() -> Router<Arc<AppHandle>> {
     Router::new()
-        .route("/", get(hello_world))
-        .route("/message", get(test_message))
+        .route("/discover", get(discover_me))
         .route("/message", post(post_message))
 }
 
 #[derive(Deserialize)]
 pub struct MessagePayload {
     pub sender: u64,
-    pub msg: String,
+    pub content: String,
 }
 
-pub async fn hello_world() -> String{
-    String::from("Hello World")
+pub async fn discover_me() -> String {
+    String::from("ACTIVE")
 }
 
 pub async fn post_message(State(app_handle): State<Arc<AppHandle>>, Json(payload): Json<MessagePayload>) {
     tauri_layer::add_message(
         app_handle,
         ChatMessage::new(payload)
-    );
-}
-
-pub async fn test_message(State(app_handle): State<Arc<AppHandle>>) {
-    tauri_layer::add_message(
-        app_handle,
-        ChatMessage::new(MessagePayload {
-            sender: 0,
-            msg: "TEST".to_string()
-        })
     );
 }
