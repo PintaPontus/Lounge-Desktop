@@ -1,5 +1,5 @@
-<img class="chat-pic" src="assets/128x128.png" alt="image">
-<div class="chat-info">
-    <h2 class="chat-name">{{ chat }}</h2>
-    <h3 class="last-message">{{ chat }}</h3>
+<img class="chat-pic" [src]="chat.pictureUri || 'assets/128x128.png'" alt="profile picture">
+<div class="chat-info" [class.unread]="chat.notify">
+    <h3 class="chat-name">{{chat.notify ? '• ' : ''}}{{ chat.name }}</h3>
+    <h4 class="last-message">{{ chat.lastMsg.chatId !== undefined ? chat.name : "Tu" }}: {{ chat.lastMsg.content }}</h4>
 </div>

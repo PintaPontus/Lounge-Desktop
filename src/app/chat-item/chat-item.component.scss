@@ -3,17 +3,19 @@
     border-radius: 10px;
     padding: 5px;
     text-align: center;
-    height: 6vw;
+    height: clamp(60px, 5vw, 80px);
     display: flex;
     justify-content: start;
     align-items: center;
     gap: 20px;
     color: slategrey;
+    width: 100%;
 }
 
 .chat-pic {
     margin-left: 5px;
     height: 90%;
+    aspect-ratio: 1/1;
     border-radius: 50%;
     border: 1px solid slategrey;
 }
@@ -25,16 +27,25 @@
     flex-direction: column;
     gap: 5px;
     text-align: start;
+    overflow: hidden;
+}
+
+.chat-info.unread{
+    color: white;
+    font-weight: bold;
 }
 
 .chat-name {
     margin: 0;
-    font-size: 1.5vw;
+    font-size: 1rem;
 }
 
 .last-message {
     margin: 0;
-    font-size: 1vw;
+    font-size: 0.8rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* On screens that are 992px or less, set the background color to blue */
