@@ -1,0 +1,10 @@
+:host {
+    justify-self: stretch;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px;
+    overflow-y: auto;
+    height: 100%;
+}

@@ -1,5 +1,5 @@
 export interface ChatMessage {
-    sender: number | undefined,
+    chatId: number | undefined,
     content: string,
     date: Date
 }

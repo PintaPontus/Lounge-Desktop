@@ -1,11 +1,5 @@
 <!--<button (click)="open()">CLICK</button>-->
 <!--{{port}}-->
 <!--CIAONE A TUTTI-->
-<messages-view
-    class="message-list"
-    [ngClass]="{'lazy': messages().length > 12}"
-    [messages]="messages()"
-    [bottomScroll]="bottomScroll.asObservable()"
-    (scroll)="onScroll()"
-></messages-view>
-<chat-prompt></chat-prompt>
+<messages-view [chatId]="chatId"class="message-list"></messages-view>
+<chat-prompt [chatId]="chatId"></chat-prompt>

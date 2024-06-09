@@ -1,2 +1,8 @@
-<input type="text" placeholder="Insert message">
+<input type="text" [formControl]="messageContent" placeholder="Insert message" (keyup.enter)="onSubmit()">
+<button (click)="onSubmit()">
+    <span class="material-symbols-outlined">
+    send
+    </span>
+</button>
 <button (click)="dev_tools()">DEV</button>
+

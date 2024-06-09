@@ -1,7 +1,6 @@
-@for (msg of messages; track $index){
+@for (msg of messages(); track $index){
     <chat-message
-        [id]="messages.length === $index+1 ? 'last-msg' : ''"
         [msg]="msg"
-        [class]="msg.sender === undefined ? 'self' : 'other'"
+        [class]="msg.chatId === undefined ? 'self' : 'other'"
     ></chat-message>
 }

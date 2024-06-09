@@ -16,8 +16,9 @@ pub fn get_router() -> Router<Arc<AppHandle>> {
 }
 
 #[derive(Deserialize)]
+#[allow(non_snake_case)]
 pub struct MessagePayload {
-    pub sender: u64,
+    pub chatId: u64,
     pub content: String,
 }
 

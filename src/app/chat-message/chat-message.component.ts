@@ -10,5 +10,11 @@ import {ChatMessage} from "../../interfaces/chat-message";
 })
 export class ChatMessageComponent {
     @Input() msg!: ChatMessage;
-    protected readonly String = String;
+
+    constructor() { }
+
+    formatDate(){
+        return String(this.msg.date.getHours()).padStart(2, '0') + ':' +  String(this.msg.date.getMinutes()).padStart(2, '0')
+    }
+
 }

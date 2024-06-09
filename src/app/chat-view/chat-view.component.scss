@@ -3,20 +3,4 @@
     justify-content: space-between;
     flex-direction: column;
 }
-.message-list {
-    height: 100%;
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    gap: 4px;
-    padding: 5px;
-    overflow-y: scroll;
-}
 
-.message-list.lazy {
-    background-color: green;
-}
-
-.message-list.lazy > :first-child {
-    margin-top: auto !important;
-}
