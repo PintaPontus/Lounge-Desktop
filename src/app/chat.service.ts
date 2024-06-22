@@ -4,6 +4,8 @@ import {appWindow} from "@tauri-apps/api/window";
 import {ChatMessage} from "../interfaces/chat-message";
 import {Event} from "@tauri-apps/api/event";
 import {Subject} from "rxjs";
+import {invoke} from "@tauri-apps/api/tauri";
+import {ChatInfo} from "../interfaces/chat-info";
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +24,10 @@ export class ChatService {
 
     public dev_tools() {
         this.logService.dev_tools();
+    }
+
+    public async getChats(){
+        return invoke<ChatInfo[]>('get_chats');
     }
 
     private addMessage(chatId: number, message: ChatMessage){

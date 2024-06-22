@@ -1,7 +1,10 @@
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
+
+use surrealdb::engine::local::Db;
+use surrealdb::Surreal;
 use tauri::{AppHandle, command, Manager, State};
-use crate::chat::{register_chat, ChatInterface, ChatMessage};
+
+use crate::chat::{ChatInterface, ChatMessage, fetch_chats, new_chat};
 
 #[command]
 pub fn log_application(msg: String){
@@ -15,11 +18,18 @@ pub fn dev_tools(app_handle: AppHandle) {
 }
 
 #[command]
-pub fn open_chat(app_handle: AppHandle, register: State<'_, Arc<Mutex<HashMap<u64, ChatInterface>>>>) -> u64 {
-    // TODO: use real address
-    let id = register_chat(String::from("127.0.0.1:8080"), register);
-    app_handle.emit_all("lounge://new-chat", id).unwrap();
-    return id;
+#[allow(dead_code)]
+pub async fn open_chat(register: State<'_, Surreal<Db>>, address: String) -> Result<i64, ()> {
+    let interface = ChatInterface::new(address);
+    new_chat(&register, interface.clone()).await;
+    Ok(interface.id)
+}
+
+
+#[command]
+#[allow(dead_code)]
+pub async fn get_chats(register: State<'_, Surreal<Db>>) -> Result<Vec<ChatInterface>, ()> {
+    Ok(fetch_chats(&register).await)
 }
 
 pub fn add_message(app_handle: Arc<AppHandle>, payload: ChatMessage) {

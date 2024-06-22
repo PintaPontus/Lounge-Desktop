@@ -1,18 +1,19 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
 use std::{env, thread};
+use std::net::SocketAddr;
+use std::sync::Arc;
 
 use axum::Router;
+use surrealdb::engine::local::Mem;
+use surrealdb::Surreal;
 use tauri::App;
 use tokio::net::TcpListener;
 use tokio::runtime::Runtime;
 
-use crate::chat::ChatInterface;
 use crate::controller::get_router;
-use crate::tauri_layer::{dev_tools, log_application, open_chat};
+use crate::tauri_layer::{dev_tools, get_chats, log_application, open_chat};
 
 mod controller;
 mod tauri_layer;
@@ -20,12 +21,18 @@ mod chat;
 
 #[tokio::main]
 async fn main() {
+    let db = Surreal::new::<Mem>(()).await.unwrap();
+
+    // Select a specific namespace / database
+    db.use_ns("Test").use_db("Test").await.unwrap();
+
     let tauri_app = tauri::Builder::default()
-        .manage(Arc::new(Mutex::new(HashMap::<u64, ChatInterface>::new())))
+        .manage(db)
         .invoke_handler(tauri::generate_handler![
             log_application,
             dev_tools,
-            open_chat
+            open_chat,
+            get_chats
         ])
         .build(tauri::generate_context!())
         .expect("Error while building Tauri Application");
@@ -54,5 +61,5 @@ async fn start_axum(axum_app: Router) {
     // println!("Starting Axum side");
     let port = env::var("LISTENING_PORT").unwrap_or(String::from("8000"));
     let listener = TcpListener::bind(format!("0.0.0.0:{}", port)).await.unwrap();
-    axum::serve(listener, axum_app).await.unwrap();
+    axum::serve(listener, axum_app.into_make_service_with_connect_info::<SocketAddr>()).await.unwrap();
 }

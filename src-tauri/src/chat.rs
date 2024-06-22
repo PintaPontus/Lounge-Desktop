@@ -1,22 +1,28 @@
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
-
-use axum::extract::{Path, State};
 use chrono::{DateTime, Utc};
 use rand::{RngCore, thread_rng};
+use serde::{Deserialize, Serialize, Serializer};
 use serde::ser::SerializeStruct;
-use serde::Serializer;
-use tauri::{AppHandle, Manager};
+use surrealdb::engine::local::Db;
+use surrealdb::sql::Thing;
+use surrealdb::Surreal;
+
 use crate::controller::MessagePayload;
 
+#[derive(Debug, Deserialize)]
+pub(crate) struct Record {
+    #[allow(dead_code)]
+    id: Thing,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ChatInterface {
-    pub id: u64,
+    pub id: i64,
     pub address: String
 }
 
 #[derive(Clone)]
 pub struct ChatMessage {
-    pub chat_id: u64,
+    pub chat_id: i64,
     pub content: String,
     pub date: DateTime<Utc>
 }
@@ -25,7 +31,7 @@ impl ChatInterface{
     pub fn new(address: String) -> Self {
         let mut rng = thread_rng();
         Self{
-            id: rng.next_u64(),
+            id: rng.next_u64() as i64,
             address
         }
     }
@@ -51,22 +57,32 @@ impl serde::ser::Serialize for ChatMessage {
     }
 }
 
-pub fn register_chat(address: String, register: tauri::State<Arc<Mutex<HashMap<u64, ChatInterface>>>>) -> u64 {
-    let interface = ChatInterface::new(address);
-    let id = interface.id;
-    println!("REGISTERED CHAT {id}");
-    register.lock().unwrap().insert(id, interface);
-    return id;
+#[allow(dead_code)]
+pub async fn new_chat(db: &Surreal<Db>, chat_interface: ChatInterface) {
+    let created: Vec<Record> = db
+        .create("chat")
+        .content(chat_interface)
+        .await
+        .unwrap();
+    dbg!(created);
+}
+
+#[allow(dead_code)]
+pub async fn fetch_chats(db: &Surreal<Db>) -> Vec<ChatInterface> {
+    let chats: Vec<ChatInterface> = db
+        .select("chat")
+        .await
+        .unwrap();
+    dbg!(&chats);
+    chats
 }
 
 // TODO: communicate with the other client
 #[allow(dead_code)]
-pub fn close_chat(State(app_handle): State<Arc<AppHandle>>, Path(chat_id): Path<u64>) {
-    match app_handle.try_state::<Arc<Mutex<HashMap<u64, ChatInterface>>>>() {
-        Some(register) => {
-            let chat = register.lock().unwrap().remove(&chat_id).unwrap();
-            println!("CHAT CLOSED {}", chat.id);
-        },
-        None => {}
-    }
+pub async fn close_chat(db: Surreal<Db>, id: i64) {
+    let deleted: Option<Record> = db
+        .delete(("chat", id))
+        .await
+        .unwrap();
+    dbg!(deleted);
 }

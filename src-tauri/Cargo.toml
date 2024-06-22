@@ -19,10 +19,12 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.6.1", features = [] }
 axum = { version = "0.7.5", features = ["json"] }
-tokio = { version = "1.37.0", features = ["full"] }
+tokio = { version = "1.37.0", features = ["full", "macros", "rt-multi-thread"] }
 tower = "0.4.13"
 rand = "0.8.5"
 chrono = { version = "0.4.38", features = ["serde"] }
+surrealdb = { version = "^1.5.2", features = ["kv-mem"] }
+hashbrown = "^0.14.5"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

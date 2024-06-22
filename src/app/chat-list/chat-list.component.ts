@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ChatItemComponent} from "../chat-item/chat-item.component";
 import {ChatMessage} from "../../interfaces/chat-message";
 import {ChatInfo} from "../../interfaces/chat-info";
+import {ChatService} from "../chat.service";
 
 @Component({
     selector: 'chat-list',
@@ -12,7 +13,7 @@ import {ChatInfo} from "../../interfaces/chat-info";
     templateUrl: './chat-list.component.html',
     styleUrl: './chat-list.component.scss'
 })
-export class ChatListComponent {
+export class ChatListComponent implements OnInit{
     chats = [
         {
             chatId: 0,
@@ -64,5 +65,14 @@ export class ChatListComponent {
             lastMsg: { chatId: 6, content: "Ultimo 6", date: new Date() } as ChatMessage
         } as ChatInfo
     ];
+
+    constructor(private chatService: ChatService) {
+    }
+
+    async ngOnInit() {
+        this.chats = await this.chatService.getChats();
+    }
+
+
 
 }
